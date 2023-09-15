@@ -47,10 +47,10 @@ public class Ticket implements Serializable {
     private Integer estadoTI;
 
     @Column(name = "requerido")
-    private String requerido;
+    private Integer requerido;
 
     @Column(name = "de_ley")
-    private String deLey;
+    private Integer deLey;
 
     @Column(name = "Observaciones")
     private String Observaciones;

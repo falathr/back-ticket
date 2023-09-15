@@ -1,4 +1,4 @@
-package com.famisanar.req.repositories;
+package com.famisanar.req.dao;
 
 import com.famisanar.req.entities.Caso;
 import org.springframework.data.jpa.repository.JpaRepository;
