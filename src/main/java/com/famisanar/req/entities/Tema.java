@@ -20,9 +20,6 @@ public class Tema implements Serializable {
     @Column(name = "des")
     private String descripcion;
 
-    @Column(name = "tema_id")
-    private Integer ticket;
-
     public Tema() {
     }
 }

@@ -1,12 +1,16 @@
 package com.famisanar.req.entities;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Setter
 @Getter
@@ -20,7 +24,7 @@ public class Ticket implements Serializable {
     private Integer id;
 
     @Column(name = "tipo")
-    private String tipo;
+    private Integer tipo;
 
     @Column(name = "ticket")
     private String ticket;
@@ -28,8 +32,8 @@ public class Ticket implements Serializable {
     @Column(name = "tema")
     private Integer tema;
 
-    @Column(name = "descrición")
-    private String descrición;
+    @Column(name = "descricion")
+    private String descricion;
 
     @Column(name = "solicitante")
     private String solicitante;
