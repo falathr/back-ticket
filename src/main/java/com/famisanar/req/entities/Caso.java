@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,8 +21,14 @@ public class Caso implements Serializable {
     @Column(name = "des")
     private String descripcion;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "caso_id", referencedColumnName = "id")
+    private List<Ticket> tickets;
+
     public Caso() {
     }
+
+    
 
 }
 

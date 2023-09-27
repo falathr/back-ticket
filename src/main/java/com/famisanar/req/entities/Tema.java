@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
@@ -19,6 +20,11 @@ public class Tema implements Serializable {
 
     @Column(name = "des")
     private String descripcion;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tema_id", referencedColumnName = "id")
+    private List<Ticket> tickets;
+
 
     public Tema() {
     }

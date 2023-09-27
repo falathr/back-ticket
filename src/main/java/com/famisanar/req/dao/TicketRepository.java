@@ -1,5 +1,6 @@
 package com.famisanar.req.dao;
 
+import com.famisanar.req.entities.Caso;
 import com.famisanar.req.entities.Ticket;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     List<Ticket> findByGerencia(Integer gerencia);
 
-    List<Ticket> findByEstadoTI(Integer estadoTI);
+    List<Ticket> findByCaso(Caso caso);
 
     List<Ticket> findByFechaSol(Date fechaSol);
 

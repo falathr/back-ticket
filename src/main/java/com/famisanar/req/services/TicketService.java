@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.famisanar.req.dto.RespuestaGetDto;
 import com.famisanar.req.entities.Ticket;
 import com.famisanar.req.helpers.TicketHelper;
 import com.famisanar.req.request.TicketRequest;
@@ -49,7 +50,7 @@ public class TicketService {
         TicketResponse ticketResponse = new TicketResponse();
 
         // Llamamos a la función de helper para realizar la consulta con filtros
-        List<Ticket> list = ticketHelper.consultaConFiltros(request);
+        List<RespuestaGetDto> list = ticketHelper.consultaConFiltros(request);
 
         try {
             // Si la lista de resultados está vacía

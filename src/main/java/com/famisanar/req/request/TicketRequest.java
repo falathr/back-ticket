@@ -31,7 +31,7 @@ public class TicketRequest implements Serializable{
     private String solicitante;
 
     @NotEmpty(message = "La gerencia es obligatorio")
-    @Pattern(regexp = "^-?[1-2]+$", message = "El codigo gerencia no es valido")
+    @Pattern(regexp = "^-?[1-4]+$", message = "El codigo gerencia no es valido")
     private String gerencia;
 
     @NotEmpty(message = "La fecha es obligatorio")
@@ -42,7 +42,7 @@ public class TicketRequest implements Serializable{
     private String responsable;
 
     @NotEmpty(message = "El estado TI es obligatorio")
-    @Pattern(regexp = "^-?[1-2]+$", message = "El codigo de estado TI no es valido")
+    @Pattern(regexp = "^-?[1-4]+$", message = "El codigo de estado TI no es valido")
     private String estadoTI;
 
     @NotEmpty(message = "El campo requerido es obligatorio")

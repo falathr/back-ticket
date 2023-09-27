@@ -13,6 +13,9 @@ import com.famisanar.req.request.TicketDatosFiltros;
 import com.famisanar.req.request.TicketRequest;
 import com.famisanar.req.request.TicketUpdateRequest;
 import com.famisanar.req.response.TicketResponse;
+import com.famisanar.req.services.CasosService;
+import com.famisanar.req.services.GerenciaService;
+import com.famisanar.req.services.TemaService;
 import com.famisanar.req.services.TicketService;
 
 import jakarta.validation.Valid;
@@ -25,6 +28,15 @@ public class servicioRest {
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private CasosService casosService;
+
+    @Autowired
+    private GerenciaService gerenciaService;
+
+    @Autowired 
+    private TemaService temaService;
 
     @RequestMapping(path = "/ticket", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public TicketResponse insertarTicket(@Valid @RequestBody TicketRequest request, BindingResult result) {
@@ -43,7 +55,7 @@ public class servicioRest {
         return response; // Devolver la respuesta con el resultado de la inserción
     }
 
-    @RequestMapping(path = "/ticket", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
+    @RequestMapping(path = "/tickets", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public TicketResponse buscarTicket(@Valid @RequestBody TicketDatosFiltros request, BindingResult result) {
         TicketResponse response = new TicketResponse();
 
@@ -85,6 +97,36 @@ public class servicioRest {
         response = ticketService.eliminarTicket(id);
 
         return response; // Devolver la respuesta con los resultados de la búsqueda
+    }
+
+    @RequestMapping(path = "/casos", method = RequestMethod.GET)
+    public TicketResponse consultarCasos() {
+        TicketResponse response = new TicketResponse();
+
+        // Si no hay errores de validación, llamar al servicio para insertar el ticket
+        response = casosService.casosLista();
+
+        return response; // Devolver la respuesta con el resultado de la inserción
+    }
+
+    @RequestMapping(path = "/gerencias", method = RequestMethod.GET)
+    public TicketResponse consultarGerencia() {
+        TicketResponse response = new TicketResponse();
+
+        // Si no hay errores de validación, llamar al servicio para insertar el ticket
+        response = gerenciaService.consultarGerencia();
+
+        return response; // Devolver la respuesta con el resultado de la inserción
+    }
+
+    @RequestMapping(path = "/temas", method = RequestMethod.GET)
+    public TicketResponse consultartemas() {
+        TicketResponse response = new TicketResponse();
+
+        // Si no hay errores de validación, llamar al servicio para insertar el ticket
+        response = temaService.consultarTemas();
+
+        return response; // Devolver la respuesta con el resultado de la inserción
     }
 
 }

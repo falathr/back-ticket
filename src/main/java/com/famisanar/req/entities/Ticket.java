@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +31,7 @@ public class Ticket implements Serializable {
     @Column(name = "ticket")
     private String ticket;
 
-    @Column(name = "tema")
+    @Column(name = "tema_id")
     private Integer tema;
 
     @Column(name = "descricion")
@@ -38,7 +40,7 @@ public class Ticket implements Serializable {
     @Column(name = "solicitante")
     private String solicitante;
 
-    @Column(name = "gerencia")
+    @Column(name = "gerencia_id")
     private Integer gerencia;
 
     @Column(name = "fecha_sol")
@@ -47,8 +49,8 @@ public class Ticket implements Serializable {
     @Column(name = "responsable")
     private String responsable;
 
-    @Column(name = "estado_ti")
-    private Integer estadoTI;
+    @Column(name = "caso_id")
+    private Integer caso;
 
     @Column(name = "requerido")
     private Integer requerido;
