@@ -1,6 +1,6 @@
 package com.famisanar.req.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ public class RespuestaGetDto {
     private String descricion;
     private String solicitante;
     private Integer gerencia;
-    private Date fechaSol;
+    private LocalDate fechaSol;
     private String responsable;
     private Integer caso;
     private Integer requerido;

@@ -46,11 +46,11 @@ public class TicketService {
     }
 
     // Este método se encarga de buscar datos a partir de una solicitud
-    public TicketResponse buscarTickets(TicketDatosFiltros request) {
+    public TicketResponse buscarTickets(TicketDatosFiltros request, Integer paginador, Integer cantidad) {
         TicketResponse ticketResponse = new TicketResponse();
 
         // Llamamos a la función de helper para realizar la consulta con filtros
-        List<RespuestaGetDto> list = ticketHelper.consultaConFiltros(request);
+        List<RespuestaGetDto> list = ticketHelper.consultaConFiltros(request, paginador, cantidad );
 
         try {
             // Si la lista de resultados está vacía

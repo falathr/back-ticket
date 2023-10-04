@@ -29,7 +29,7 @@ public class TicketUpdateRequest {
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$", message = "El campo solo debe contener letras")
     private String responsable;
 
-    @Pattern(regexp = "^-?[1-2]+$", message = "El codigo de estado TI no es valido")
+    @Pattern(regexp = "^-?[1-3]+$", message = "El codigo de estado TI no es valido")
     private String estadoTI;
 
     @Pattern(regexp = "^-?[1-2]+$", message = "El campo requerido no es valido")

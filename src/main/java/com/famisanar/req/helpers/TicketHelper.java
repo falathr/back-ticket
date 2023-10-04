@@ -1,13 +1,19 @@
 package com.famisanar.req.helpers;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.famisanar.req.dao.CasoRepository;
@@ -19,10 +25,10 @@ import com.famisanar.req.entities.Caso;
 import com.famisanar.req.entities.Gerencia;
 import com.famisanar.req.entities.Tema;
 import com.famisanar.req.entities.Ticket;
+import com.famisanar.req.request.TicketDatosFiltros;
 import com.famisanar.req.request.TicketPorFiltroRequest;
 import com.famisanar.req.request.TicketRequest;
 import com.famisanar.req.request.TicketUpdateRequest;
-import com.famisanar.req.request.TicketDatosFiltros;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -48,10 +54,9 @@ public class TicketHelper {
     EntityManager manager;
 
     // Consulta toda la tabla
-    public List<Ticket> obtenerTicket() {
-        List<Ticket> tickets = ticketRepository.findAll();
-        return tickets;
-    }
+    public Page<Ticket> obtenerTickets(Pageable pageable) {
+    return ticketRepository.findAll(pageable);
+}
 
     // Consulta por tema
     public List<Ticket> ticketPorTema(Integer tema) {
@@ -98,13 +103,14 @@ public class TicketHelper {
     // Guarda un nuevo ticket
     public boolean guardarTicket(TicketRequest ticket) {
         Ticket ticket2 = new Ticket();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaString = ticket.getFechaSol();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         // Integer datos = ;
         // logger.info("Estado: " +datos);
         // Caso caso= casoRepository.consultarId(datos);
 
         try {
-            Date date = dateFormat.parse(ticket.getFechaSol());
+            LocalDate date = LocalDate.parse(fechaString, formatter);
             ticket2.setTipo(Integer.parseInt(ticket.getTipo()));
             ticket2.setTicket(ticket.getTicket());
             ticket2.setTema(Integer.parseInt(ticket.getTema()));
@@ -128,11 +134,13 @@ public class TicketHelper {
     }
 
     // Metodo principal para consultar por filtro o sin filtro
-    public List<RespuestaGetDto> consultaConFiltros(TicketDatosFiltros request) {
+    public List<RespuestaGetDto> consultaConFiltros(TicketDatosFiltros request, Integer paginador, Integer cantidad) {
         String query = "SELECT t FROM Ticket t WHERE ";
+        Pageable pageable = PageRequest.of(paginador, cantidad);
         List<RespuestaGetDto> respuestaGetDtos = new ArrayList<>();
         List<TicketPorFiltroRequest> filtroRequests = request.getDatos();
-        List<Ticket> list = new ArrayList<>();
+        Page<Ticket> list = obtenerTickets(pageable);
+        List<Ticket> list2 = new ArrayList<>();
         Optional<Caso> caso;
         Optional<Gerencia> gerencia;
         Optional<Tema> tema;
@@ -140,8 +148,8 @@ public class TicketHelper {
             // Valida si la variable viene con o sin filtros
             if (filtroRequests.size() == 0) {
                 // realiza la consulta sin filtros
-                list = obtenerTicket();
-                for (Ticket ticket : list) {
+                for (Iterator tickets = list.iterator(); tickets.hasNext();) {
+                    Ticket ticket = (Ticket) tickets.next();
                     RespuestaGetDto getDto = new RespuestaGetDto();
                     getDto.setId(ticket.getId());
                     getDto.setTipo(ticket.getTipo());
@@ -247,8 +255,8 @@ public class TicketHelper {
 
                 }
                 // Realiza la consulta con filtros aplicados
-                list = manager.createQuery(query, Ticket.class).getResultList();
-                for (Ticket ticket : list) {
+                list2 = manager.createQuery(query, Ticket.class).getResultList();
+                for (Ticket ticket : list2) {
                     RespuestaGetDto getDto = new RespuestaGetDto();
                     getDto.setId(ticket.getId());
                     getDto.setTipo(ticket.getTipo());
@@ -314,7 +322,9 @@ public class TicketHelper {
 
     public Ticket actualizarTicket(Integer id, TicketUpdateRequest request) {
         Optional<Ticket> ticketActual = ticketRepository.findById(id);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaString = request.getFechaSol(); // Asumiendo que ticket.getFechaSol() devuelve una String en el formato "dd-MM-yyyy"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        
         Ticket ticketActualizado = new Ticket();
         // Optional<Caso> caso = casoRepository.findById(id);
 
@@ -323,7 +333,7 @@ public class TicketHelper {
                 Ticket nuevoTicket = ticketActual.get();
                 // Caso caso2 = caso.get();
                 if (request.getFechaSol() != null) {
-                    Date date = dateFormat.parse(request.getFechaSol());
+                    LocalDate date = LocalDate.parse(fechaString, formatter);
                     nuevoTicket.setFechaSol(date);
                 } else {
                     nuevoTicket.setFechaSol(nuevoTicket.getFechaSol());

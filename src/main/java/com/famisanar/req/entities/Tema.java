@@ -25,7 +25,6 @@ public class Tema implements Serializable {
     @JoinColumn(name = "tema_id", referencedColumnName = "id")
     private List<Ticket> tickets;
 
-
     public Tema() {
     }
 }
