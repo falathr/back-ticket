@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.famisanar.req.dto.RespuestaGetGestionDto;
 import com.famisanar.req.entities.GestionTicket;
 import com.famisanar.req.helpers.GestionTicketHelper;
 import com.famisanar.req.request.GestionTicketBodyRequest;
@@ -31,7 +32,7 @@ public class GestionTicketService {
     
     public TicketResponse consultarGestion(Integer id){
         TicketResponse response = new TicketResponse();
-        List<GestionTicket> gestionTickets = gestionTicketHelper.gestionTicket(id);
+        List<RespuestaGetGestionDto> gestionTickets = gestionTicketHelper.gestionTicket(id);
         if (gestionTickets.size() != 0) {
             response.setCodigoRespuesta("000");
             response.setDescripcion("Consulta exitoso");

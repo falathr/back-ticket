@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.famisanar.req.dao.GestionTicketRepository;
+import com.famisanar.req.dao.ResponsableRepository;
+import com.famisanar.req.dto.RespuestaGetGestionDto;
 import com.famisanar.req.entities.GestionTicket;
+import com.famisanar.req.entities.Responsable;
 import com.famisanar.req.request.GestionTicketBodyRequest;
 
 @Service
@@ -21,6 +24,9 @@ public class GestionTicketHelper {
 
     @Autowired
     GestionTicketRepository gestionTicketRepository;
+
+    @Autowired
+    ResponsableRepository responsableRepository;
 
     //Metodo post
     public boolean guardarGestionTicket(GestionTicketBodyRequest request) {
@@ -46,9 +52,25 @@ public class GestionTicketHelper {
     }
 
     //Metodo get
-    public List<GestionTicket> gestionTicket(Integer id) {
-        List<GestionTicket> gestionTickets = new ArrayList<>();
-        gestionTickets = gestionTicketRepository.findByTicketId(id);
+    public List<RespuestaGetGestionDto> gestionTicket(Integer id) {
+
+        List<RespuestaGetGestionDto> gestionTickets = new ArrayList<>();
+        List<GestionTicket> gestionTicket = new ArrayList<>();
+        gestionTicket = gestionTicketRepository.findByTicketId(id);
+        for (GestionTicket gestionTicket2 : gestionTicket) {
+            RespuestaGetGestionDto dto = new RespuestaGetGestionDto();
+            Optional<Responsable> responsable = responsableRepository.findById(gestionTicket2.getResponsableId());
+            if (responsable.isPresent()) {
+                Responsable responsable4 = responsable.get();
+                dto.setDescResponsable(responsable4.getNombres() +" " + responsable4.getApellidos());
+            }
+            dto.setDescripcion(gestionTicket2.getDescripcion());
+            dto.setFechaDescri(gestionTicket2.getFechaDescri());
+            dto.setId(gestionTicket2.getId());
+            dto.setResponsableId(gestionTicket2.getResponsableId());
+            dto.setTicketId(gestionTicket2.getTicketId());
+            gestionTickets.add(dto);
+        }
         return gestionTickets;
     }
 
