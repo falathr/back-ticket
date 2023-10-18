@@ -14,7 +14,7 @@ import com.famisanar.req.dao.GestionTicketRepository;
 import com.famisanar.req.dao.ResponsableRepository;
 import com.famisanar.req.dto.RespuestaGetGestionDto;
 import com.famisanar.req.entities.GestionTicket;
-import com.famisanar.req.entities.Responsable;
+import com.famisanar.req.entities.Persona;
 import com.famisanar.req.request.GestionTicketBodyRequest;
 
 @Service
@@ -59,9 +59,9 @@ public class GestionTicketHelper {
         gestionTicket = gestionTicketRepository.findByTicketId(id);
         for (GestionTicket gestionTicket2 : gestionTicket) {
             RespuestaGetGestionDto dto = new RespuestaGetGestionDto();
-            Optional<Responsable> responsable = responsableRepository.findById(gestionTicket2.getResponsableId());
+            Optional<Persona> responsable = responsableRepository.findById(gestionTicket2.getResponsableId());
             if (responsable.isPresent()) {
-                Responsable responsable4 = responsable.get();
+                Persona responsable4 = responsable.get();
                 dto.setDescResponsable(responsable4.getNombres() +" " + responsable4.getApellidos());
             }
             dto.setDescripcion(gestionTicket2.getDescripcion());

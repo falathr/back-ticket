@@ -1,6 +1,5 @@
 package com.famisanar.req.helpers;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,11 +17,13 @@ import org.springframework.stereotype.Service;
 
 import com.famisanar.req.dao.CasoRepository;
 import com.famisanar.req.dao.GerenciaRepository;
+import com.famisanar.req.dao.ResponsableRepository;
 import com.famisanar.req.dao.TemaRepository;
 import com.famisanar.req.dao.TicketRepository;
 import com.famisanar.req.dto.RespuestaGetDto;
 import com.famisanar.req.entities.Caso;
 import com.famisanar.req.entities.Gerencia;
+import com.famisanar.req.entities.Persona;
 import com.famisanar.req.entities.Tema;
 import com.famisanar.req.entities.Ticket;
 import com.famisanar.req.request.TicketDatosFiltros;
@@ -49,6 +50,9 @@ public class TicketHelper {
 
     @Autowired
     private TemaRepository temaRepository;
+
+    @Autowired
+    private ResponsableRepository responsableRepository;
 
     @PersistenceContext
     EntityManager manager;
@@ -105,9 +109,6 @@ public class TicketHelper {
         Ticket ticket2 = new Ticket();
         String fechaString = ticket.getFechaSol();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        // Integer datos = ;
-        // logger.info("Estado: " +datos);
-        // Caso caso= casoRepository.consultarId(datos);
 
         try {
             LocalDate date = LocalDate.parse(fechaString, formatter);
@@ -115,14 +116,15 @@ public class TicketHelper {
             ticket2.setTicket(ticket.getTicket());
             ticket2.setTema(Integer.parseInt(ticket.getTema()));
             ticket2.setDescricion(ticket.getDescripcion());
-            ticket2.setSolicitante(ticket.getSolicitante());
+            ticket2.setSolicitante(Integer.parseInt(ticket.getSolicitante()));
             ticket2.setGerencia(Integer.parseInt(ticket.getGerencia()));
             ticket2.setFechaSol(date);
-            ticket2.setResponsable(ticket.getResponsable());
+            ticket2.setResponsable(Integer.parseInt(ticket.getResponsable()));
             ticket2.setCaso(Integer.parseInt(ticket.getEstadoTI()));
             ticket2.setRequerido(Integer.parseInt(ticket.getRequerido()));
             ticket2.setDeLey(Integer.parseInt(ticket.getDeLey()));
             ticket2.setObservaciones(ticket.getObservaciones());
+            ticket2.setNumeroCaso(ticket.getNumeroCaso());
 
             ticketRepository.save(ticket2);
             return true;
@@ -135,7 +137,7 @@ public class TicketHelper {
 
     // Metodo principal para consultar por filtro o sin filtro
     public List<RespuestaGetDto> consultaConFiltros(TicketDatosFiltros request, Integer paginador, Integer cantidad) {
-        String query = "SELECT t FROM Ticket t WHERE ";
+        String query = "SELECT t FROM Ticket t WHERE";
         Pageable pageable = PageRequest.of(paginador, cantidad);
         List<RespuestaGetDto> respuestaGetDtos = new ArrayList<>();
         List<TicketPorFiltroRequest> filtroRequests = request.getDatos();
@@ -144,6 +146,7 @@ public class TicketHelper {
         Optional<Caso> caso;
         Optional<Gerencia> gerencia;
         Optional<Tema> tema;
+        Optional<Persona> persona;
         try {
             // Valida si la variable viene con o sin filtros
             if (filtroRequests.size() == 0) {
@@ -200,6 +203,20 @@ public class TicketHelper {
                         getDto.setDescTema(temaDesc.getDescripcion());
                     }
 
+                    persona = responsableRepository.findById(ticket.getResponsable());
+                    if (persona.isPresent()) {
+                        Persona personaDes = persona.get();
+                        getDto.setDescResponsable(personaDes.getNombres() +" "+ personaDes.getApellidos());
+                    }
+
+                    persona = responsableRepository.findById(ticket.getSolicitante());
+                    if (persona.isPresent()) {
+                        Persona personaDes = persona.get();
+                        getDto.setDescSolicitante(personaDes.getNombres() +" "+ personaDes.getApellidos());
+                    }
+
+                    getDto.setNumeroCaso(ticket.getNumeroCaso());
+
                     respuestaGetDtos.add(getDto);
 
                 }
@@ -207,7 +224,7 @@ public class TicketHelper {
                 for (int i = 0; i < filtroRequests.size(); i++) {
                     // Arma la consulta con filtros
                     if (i > 0) {
-                        query += " AND ";
+                        query += " AND";
                     }
                     TicketPorFiltroRequest datosFinal = filtroRequests.get(i);
                     String valor = datosFinal.getValor();
@@ -226,28 +243,31 @@ public class TicketHelper {
                             query += " t.descricion like '%" + valor.trim() + "%'";
                             break;
                         case "5":
-                            query += " t.solicitante like '%" + valor.trim() + "%'";
+                            query += " t.solicitante = " + valor.trim();
                             break;
                         case "6":
                             query += " t.gerencia = " + valor.trim();
                             break;
                         case "7":
-                            query += " t.fecha_sol = " + valor.trim();
+                            query += " t.fechaSol = " + valor.trim();
                             break;
                         case "8":
-                            query += " t.responsable like '%" + valor.trim() + "%'";
+                            query += " t.responsable = " + valor.trim();
                             break;
                         case "9":
-                            query += " t.estado_ti = " + valor.trim();
+                            query += " t.caso = " + valor.trim();
                             break;
                         case "10":
                             query += " t.requerido = " + valor.trim();
                             break;
                         case "11":
-                            query += " t.de_ley = " + valor.trim();
+                            query += " t.deLey = " + valor.trim();
                             break;
                         case "12":
                             query += " t.observaciones like '%" + valor.trim() + "%'";
+                            break;
+                        case "13":
+                            query += " t.numeroCaso like '%" + valor.trim() + "%'";
                             break;
                         default:
                             break;
@@ -307,6 +327,20 @@ public class TicketHelper {
                         getDto.setDescTema(temaDesc.getDescripcion());
                     }
 
+                    persona = responsableRepository.findById(ticket.getResponsable());
+                    if (persona.isPresent()) {
+                        Persona personaDes = persona.get();
+                        getDto.setDescResponsable(personaDes.getNombres() +" "+ personaDes.getApellidos());
+                    }
+
+                    persona = responsableRepository.findById(ticket.getSolicitante());
+                    if (persona.isPresent()) {
+                        Persona personaDes = persona.get();
+                        getDto.setDescSolicitante(personaDes.getNombres() +" "+ personaDes.getApellidos());
+                    }
+
+                    getDto.setNumeroCaso(ticket.getNumeroCaso());
+                    
                     respuestaGetDtos.add(getDto);
 
                 }
@@ -351,15 +385,15 @@ public class TicketHelper {
                 nuevoTicket.setRequerido(request.getRequerido() != null ? Integer.parseInt(request.getRequerido())
                         : nuevoTicket.getRequerido());
                 nuevoTicket.setResponsable(
-                        request.getResponsable() != null ? request.getResponsable() : nuevoTicket.getResponsable());
+                        request.getResponsable() != null ? Integer.parseInt(request.getResponsable())  : nuevoTicket.getResponsable());
                 nuevoTicket.setSolicitante(
-                        request.getSolicitante() != null ? request.getSolicitante() : nuevoTicket.getSolicitante());
+                        request.getSolicitante() != null ? Integer.parseInt(request.getSolicitante())  : nuevoTicket.getSolicitante());
                 nuevoTicket.setTema(
                         request.getTema() != null ? Integer.parseInt(request.getTema()) : nuevoTicket.getTema());
                 nuevoTicket.setTicket(request.getTicket() != null ? request.getTicket() : nuevoTicket.getTicket());
                 nuevoTicket.setTipo(
                         request.getTipo() != null ? Integer.parseInt(request.getTipo()) : nuevoTicket.getTipo());
-
+                nuevoTicket.setNumeroCaso(request.getNumeroCaso() != null ? request.getNumeroCaso() : nuevoTicket.getNumeroCaso());
                 ticketActualizado = ticketRepository.save(nuevoTicket);
 
             } else {

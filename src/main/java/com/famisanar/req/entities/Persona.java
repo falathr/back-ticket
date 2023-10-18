@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -19,8 +20,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "responsable")
-public class Responsable implements Serializable{
+@Table(name = "persona")
+public class Persona implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -49,11 +50,25 @@ public class Responsable implements Serializable{
 
     @Column(name = "sexo")
     private String sexo;
+    
+    @Column(name = "actividad_id")
+    private Integer actividad;
+
+    @Column(name = "estado")
+    private Integer estado;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "responsable_id", referencedColumnName = "id")
     private List<GestionTicket> gestionTickets;
 
-    public Responsable() {
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "solicitante_id", referencedColumnName = "id")
+    private List<Ticket> solicitanteTicket;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "responsable_id", referencedColumnName = "id")
+    private List<Ticket> responsableTicket;
+
+    public Persona() {
     }
 }

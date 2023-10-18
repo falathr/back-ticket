@@ -40,17 +40,14 @@ public class Ticket implements Serializable {
     @Column(name = "descricion")
     private String descricion;
 
-    @Column(name = "solicitante")
-    private String solicitante;
-
     @Column(name = "gerencia_id")
     private Integer gerencia;
 
     @Column(name = "fecha_sol")
     private LocalDate fechaSol;
 
-    @Column(name = "responsable")
-    private String responsable;
+    @Column(name = "responsable_id")
+    private Integer responsable;
 
     @Column(name = "caso_id")
     private Integer caso;
@@ -62,11 +59,17 @@ public class Ticket implements Serializable {
     private Integer deLey;
 
     @Column(name = "Observaciones")
-    private String Observaciones;
+    private String observaciones;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")
     private List<GestionTicket> gestionTickets;
+
+    @Column(name = "solicitante_id")
+    private Integer solicitante;
+
+    @Column(name = "NUMERO_CASO")
+    private String numeroCaso;
 
     public Ticket() {
     }

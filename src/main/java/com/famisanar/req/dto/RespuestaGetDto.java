@@ -13,10 +13,10 @@ public class RespuestaGetDto {
     private String ticket;
     private Integer tema;
     private String descricion;
-    private String solicitante;
+    private Integer solicitante;
     private Integer gerencia;
     private LocalDate fechaSol;
-    private String responsable;
+    private Integer responsable;
     private Integer caso;
     private Integer requerido;
     private Integer deLey;
@@ -27,6 +27,9 @@ public class RespuestaGetDto {
     private String descTipo;
     private String descRequerido;
     private String descDeLey;
+    private String descResponsable;
+    private String descSolicitante;
+    private String numeroCaso;
 
     public RespuestaGetDto() {
     }

@@ -20,6 +20,9 @@ public class TicketRequest implements Serializable{
     private String ticket;
 
     @NotEmpty(message = "El codigo del ticket es obligatorio")
+    private String numeroCaso;
+
+    @NotEmpty(message = "El codigo del ticket es obligatorio")
     @Pattern(regexp = "^-?[0-9]+$", message = "El codigo del ticket no es valido")
     private String tema;
 
@@ -27,7 +30,7 @@ public class TicketRequest implements Serializable{
     private String descripcion;
 
     @NotEmpty(message = "El codigo del ticket es obligatorio")
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$", message = "El campo solicitante solo debe contener letras")
+    @Pattern(regexp = "^-?[0-9]+$", message = "El campo solicitante solo debe contener numeros")
     private String solicitante;
 
     @NotEmpty(message = "La gerencia es obligatorio")
@@ -38,7 +41,7 @@ public class TicketRequest implements Serializable{
     private String fechaSol;
 
     @NotEmpty(message = "El responsable es obligatorio")
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$", message = "El campo responsable solo debe contener letras")
+    @Pattern(regexp = "^-?[0-9]+$", message = "El campo responsable solo debe contener numeros")
     private String responsable;
 
     @NotEmpty(message = "El estado TI es obligatorio")
@@ -54,7 +57,6 @@ public class TicketRequest implements Serializable{
     private String deLey;
 
     @NotEmpty(message = "Las observaciones son obligatorias")
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$", message = "El campo observación solo debe contener letras")
     private String observaciones;
     
 }
