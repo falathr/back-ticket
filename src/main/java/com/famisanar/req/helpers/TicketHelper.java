@@ -159,7 +159,7 @@ public class TicketHelper {
                     if (ticket.getTipo() == 1) {
                         getDto.setDescTipo("Requerimiento");
                     } else {
-                        getDto.setDescTipo("SIA");
+                        getDto.setDescTipo("Hotfix");
                     }
                     getDto.setTicket(ticket.getTicket());
                     getDto.setTema(ticket.getTema());
@@ -283,7 +283,7 @@ public class TicketHelper {
                     if (ticket.getTipo() == 1) {
                         getDto.setDescTipo("Requerimiento");
                     } else {
-                        getDto.setDescTipo("SIA");
+                        getDto.setDescTipo("Hotfix");
                     }
                     getDto.setTicket(ticket.getTicket());
                     getDto.setTema(ticket.getTema());

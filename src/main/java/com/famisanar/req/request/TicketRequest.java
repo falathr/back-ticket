@@ -19,7 +19,7 @@ public class TicketRequest implements Serializable{
     @NotEmpty(message = "El codigo del ticket es obligatorio")
     private String ticket;
 
-    @NotEmpty(message = "El codigo del ticket es obligatorio")
+    @NotEmpty(message = "El codigo numero de caso es obligatorio")
     private String numeroCaso;
 
     @NotEmpty(message = "El codigo del ticket es obligatorio")
